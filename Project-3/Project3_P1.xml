@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"? standalone = "no"?>
+<!DOCTYPE projects [
+<!ELEMENT projects (project*)>
+<!ELEMENT project (leader,(leader|analyst)*)>
+<!ATTLIST project pid ID #REQUIRED>
+<!ELEMENT pid (#PCDATA)>
+<!ELEMENT leader (name)>
+<!ELEMENT analyst (name)>
+<!ELEMENT name (#PCDATA)>
+]>
+<projects>
+	<project pid="p123">
+		<leader>
+			<name>Amanda</name>
+		</leader>
+		<analyst>
+			<name>Bob</name>
+		</analyst>
+	</project>
+	<project pid="p456">
+		<leader>
+			<name>John</name>
+		</leader>
+	</project>
+	<project pid="p789">
+		<leader>
+			<name>David</name>	
+		</leader>
+		<analyst>
+			<name>Amanda</name>
+		</analyst>
+	</project>
+</projects>
+

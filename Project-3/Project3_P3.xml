@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"? standalone = "no"?>
+<!DOCTYPE workforce[
+<!ELEMENT workforce (emp+)>
+<!ELEMENT emp (projects)>
+<!ATTLIST emp roles CDATA #REQUIRED>
+<!ATTLIST emp name ID #REQUIRED>
+<!ELEMENT projects (proj+)>
+<!ELEMENT proj (#PCDATA)>
+]>
+<workforce>
+<emp name="Amanda" roles="leader,analyst">
+<projects>
+<proj>p123</proj>
+<proj>p789</proj>
+</projects>
+</emp>
+<emp roles="analyst" name="Bob">
+<projects>
+<proj>p123</proj>
+</projects>
+</emp>
+<emp roles="leader" name="David">
+<projects>
+<proj>p789</proj>
+</projects>
+</emp>
+<emp roles="leader" name="John">
+<projects>
+<proj>p456</proj>
+</projects>
+</emp>
+</workforce>
