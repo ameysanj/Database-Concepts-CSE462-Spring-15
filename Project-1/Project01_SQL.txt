@@ -1,0 +1,86 @@
+
+--Query 1.1— 
+
+CREATE View Emp_Assignment(EMPNAME, SSN, Startyear, Endyear) AS
+Select EMPNAME, SSN, Startyear, Endyear 
+FROM EMP NATURAL JOIN Assign;
+
+SELECT EMPNAME, AVG(EndYear - StartYear) AS AvgLength
+FROM Emp_Assignment
+GROUP BY EMPNAME
+ORDER BY AvgLength DESC;
+
+————————————————————-—————————— 
+
+--Query 1.2 —
+
+CREATE VIEW City_Assignments AS
+SELECT CITYNAME, MAX(Endyear-Startyear) AS Max_Assign_Length
+FROM ASSIGN
+GROUP BY CITYNAME;
+
+CREATE VIEW MaxAssignment(years) AS
+SELECT MAX(Endyear-Startyear)
+FROM ASSIGN;
+
+SELECT CITYNAME
+FROM City_Assignments JOIN MaxAssignment
+ON City_Assignments.MAX_ASSIGN_LENGTH = MaxAssignment.years; 
+
+—————————————————————————————————————— 
+
+--Query 1.3 —
+
+CREATE View Emp_Assignment_With_Cities(EMPNAME, CITYNAME, SSN, Startyear, Endyear) AS
+Select EMPNAME, CITYNAME, SSN, Startyear, Endyear 
+FROM EMP NATURAL JOIN Assign;
+
+SELECT E1.EMPNAME 
+FROM Emp_Assignment_With_Cities E1 JOIN Emp_Assignment_With_Cities E2
+ON E1.EMPNAME = E2.EMPNAME AND E1.Startyear = E2.Endyear; 
+
+—————————————————————————————————————— 
+
+--Query 1.4 — 
+
+CREATE VIEW Judy_Brown_Assignments(CITYNAME,Startyear,Endyear) AS
+SELECT Cityname, Startyear,Endyear
+FROM Emp_Assignment_With_Cities
+WHERE EMPNAME = 'Judy Brown';
+
+SELECT DISTINCT EMPNAME
+FROM Emp_Assignment_With_Cities E1 JOIN Judy_Brown_Assignments J
+ON (E1.EMPNAME <> 'Judy Brown' AND E1.CITYNAME = J.CITYNAME AND E1.Startyear =  J.Startyear AND E1.StartYear<J.Endyear)
+OR (E1.EMPNAME <> 'Judy Brown' AND E1.CITYNAME = J.CITYNAME AND J.Startyear < E1.Endyear);
+
+—————————————————————————————————————— 
+
+--Query 1.5 — 
+
+CREATE VIEW JIM_ASSIGNMENT1(CITYNAME) AS
+SELECT CITYNAME FROM Jim_Smith_Assignments
+MINUS
+SELECT J1.CITYNAME 
+FROM Jim_Smith_Assignments J1 JOIN Jim_Smith_Assignments J2
+ON J1.Startyear>J2.Startyear;
+
+CREATE VIEW JIM_ASSIGNMENT2(CITYNAME) AS
+SELECT CITYNAME FROM Jim_Smith_Assignments
+MINUS
+SELECT J1.CITYNAME 
+FROM Jim_Smith_Assignments J1 JOIN Jim_Smith_Assignments J2
+ON J1.Startyear<J2.Startyear;
+
+CREATE VIEW Assignment_1 AS
+SELECT * 
+FROM Emp_Assignment_With_Cities E NATURAL JOIN JIM_ASSIGNMENT1;
+
+CREATE VIEW Assignment_2 AS
+SELECT * 
+FROM Emp_Assignment_With_Cities E NATURAL JOIN JIM_ASSIGNMENT2;
+
+SELECT A1.EMPNAME
+FROM Assignment_1 A1, Assignment_2 A2
+WHERE A1.EMPNAME = A2.EMPNAME AND A1.EMPNAME <> 'Jim Smith';
+
+————————————————————————————————————— 
